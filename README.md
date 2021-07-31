@@ -1,0 +1,1 @@
+# Dictionary Chrome Extension
