@@ -1,13 +1,23 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import ReactDOM from 'react-dom'
 import './popup.css'
+import WordCard from '../components/WordCard'
+import {getStoredWords} from '../utils/storage'
 
 const App: React.FC<{}> = () => {
-  return (
-    <div>
-      <img src="icon.png" />
-    </div>
-  )
+	const [words, setWords] = useState<string[]>([])
+
+	useEffect(() => {
+		getStoredWords().then((words) => setWords(words))
+	}, [])
+
+	return (
+		<>
+			{words.map((word, index) => (
+				<WordCard key={index} word={word} />
+			))}
+		</>
+	)
 }
 
 const root = document.createElement('div')
