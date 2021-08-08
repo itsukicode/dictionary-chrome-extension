@@ -1,4 +1,5 @@
-// TODO: background script
+import {setStoredWords} from '../utils/storage'
+
 chrome.runtime.onInstalled.addListener(() => {
-  // TODO: on installed function
+	setStoredWords(['心'])
 })
