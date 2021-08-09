@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import ReactDOM from 'react-dom'
 import './popup.css'
 import WordCard from '../components/WordCard'
-import {getStoredWords} from '../utils/storage'
+import {getStoredWords, setStoredWords} from '../utils/storage'
 import {Box} from '@material-ui/core'
 
 const App: React.FC<{}> = () => {
@@ -12,10 +12,22 @@ const App: React.FC<{}> = () => {
 		getStoredWords().then((words) => setWords(words))
 	}, [])
 
+	const handleWordDeleteButtonClick = (index: number) => {
+		words.splice(index, 1)
+		const updatedWords = [...words]
+		setStoredWords(updatedWords).then(() => {
+			setWords(updatedWords)
+		})
+	}
+
 	return (
 		<Box mx='8px' my='16px'>
 			{words.map((word, index) => (
-				<WordCard key={index} word={word} />
+				<WordCard
+					key={index}
+					word={word}
+					onDelete={() => handleWordDeleteButtonClick(index)}
+				/>
 			))}
 		</Box>
 	)

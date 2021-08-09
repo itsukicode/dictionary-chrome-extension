@@ -14,9 +14,13 @@ import {
 import './WordCard.css'
 import Loader from 'react-loader-spinner'
 
+type Props = {
+	word: string
+	onDelete: () => void
+}
 type WordCardState = 'loading' | 'error' | 'ready'
 
-const WordCard: React.FC<{word: string}> = ({word}) => {
+const WordCard: React.FC<Props> = ({word, onDelete}) => {
 	const [wordData, setWordData] = useState<WordData | null>(null)
 	const [wordCardState, setWordCardState] = useState<WordCardState>('loading')
 	const [wordAudio, setWordAudio] = useState<HTMLAudioElement | null>(null)
@@ -91,7 +95,12 @@ const WordCard: React.FC<{word: string}> = ({word}) => {
 					</Grid>
 					<Grid item xs={4} alignItems='flex-end'>
 						<CardActions>
-							<Button color='secondary' size='small' variant='outlined'>
+							<Button
+								color='secondary'
+								size='small'
+								variant='outlined'
+								onClick={onDelete}
+							>
 								<Typography className='wordCard-delete'>消去</Typography>
 							</Button>
 						</CardActions>
