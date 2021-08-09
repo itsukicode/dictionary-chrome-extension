@@ -38,63 +38,67 @@ const WordCard: React.FC<{word: string}> = ({word}) => {
 
 	if (wordCardState === 'loading' || wordCardState === 'error') {
 		return (
-			<Card elevation={2}>
-				<Grid container justify='center' alignItems='center'>
-					<Grid item>
-						<CardContent>
-							{wordCardState === 'loading' && (
-								<Loader
-									type='TailSpin'
-									color='#00BFFF'
-									height={80}
-									width={80}
-								/>
-							)}
-							{wordCardState === 'error' && (
-								<Typography color='secondary'>
-									Error: could not retrieve word data
-								</Typography>
-							)}
-						</CardContent>
+			<Box my={'16px'}>
+				<Card elevation={2}>
+					<Grid container justify='center' alignItems='center'>
+						<Grid item>
+							<CardContent>
+								{wordCardState === 'loading' && (
+									<Loader
+										type='TailSpin'
+										color='#00BFFF'
+										height={80}
+										width={80}
+									/>
+								)}
+								{wordCardState === 'error' && (
+									<Typography color='secondary'>
+										Error: could not retrieve word data
+									</Typography>
+								)}
+							</CardContent>
+						</Grid>
 					</Grid>
-				</Grid>
-			</Card>
+				</Card>
+			</Box>
 		)
 	}
 	return (
-		<Card elevation={2}>
-			<Grid container>
-				<Grid item xs={8}>
-					<CardContent>
-						<Grid className='wordCard-wrap' container alignItems='center'>
-							<Grid item>
-								<Typography className='wordCard-word'>{word}</Typography>
+		<Box my={'16px'}>
+			<Card elevation={2}>
+				<Grid container>
+					<Grid item xs={8}>
+						<CardContent>
+							<Grid className='wordCard-wrap' container alignItems='center'>
+								<Grid item>
+									<Typography className='wordCard-word'>{word}</Typography>
+								</Grid>
+								<Grid item>
+									<IconButton onClick={handleAudioPlay}>
+										<VolumeIcon>
+											<audio src={wordData.word.audioSrc}></audio>
+										</VolumeIcon>
+									</IconButton>
+								</Grid>
 							</Grid>
-							<Grid item>
-								<IconButton onClick={handleAudioPlay}>
-									<VolumeIcon>
-										<audio src={wordData.word.audioSrc}></audio>
-									</VolumeIcon>
-								</IconButton>
-							</Grid>
-						</Grid>
-						<Typography className='wordCard-pronounce' color='textSecondary'>
-							{wordData.word.pronounce}
-						</Typography>
-						<Typography className='wordCard-def'>
-							{wordData.word.def}
-						</Typography>
-					</CardContent>
+							<Typography className='wordCard-pronounce' color='textSecondary'>
+								{wordData.word.pronounce}
+							</Typography>
+							<Typography className='wordCard-def'>
+								{wordData.word.def}
+							</Typography>
+						</CardContent>
+					</Grid>
+					<Grid item xs={4} alignItems='flex-end'>
+						<CardActions>
+							<Button color='secondary' size='small' variant='outlined'>
+								<Typography className='wordCard-delete'>消去</Typography>
+							</Button>
+						</CardActions>
+					</Grid>
 				</Grid>
-				<Grid item xs={4} alignItems='flex-end'>
-					<CardActions>
-						<Button color='secondary' size='small' variant='outlined'>
-							<Typography className='wordCard-delete'>消去</Typography>
-						</Button>
-					</CardActions>
-				</Grid>
-			</Grid>
-		</Card>
+			</Card>
+		</Box>
 	)
 }
 export default WordCard
