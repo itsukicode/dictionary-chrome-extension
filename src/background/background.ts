@@ -1,5 +1,5 @@
 import {setStoredWords} from '../utils/storage'
 
 chrome.runtime.onInstalled.addListener(() => {
-	setStoredWords(['心'])
+	setStoredWords(['食物'])
 })
