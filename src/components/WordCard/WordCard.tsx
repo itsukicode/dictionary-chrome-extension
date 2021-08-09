@@ -3,6 +3,7 @@ import {fetchWordData, WordData} from '../../utils/api'
 import {VolumeUp as VolumeIcon} from '@material-ui/icons'
 import {
 	Button,
+	Box,
 	Card,
 	CardActions,
 	CardContent,
@@ -11,6 +12,7 @@ import {
 	Typography,
 } from '@material-ui/core'
 import './WordCard.css'
+import Loader from 'react-loader-spinner'
 
 type WordCardState = 'loading' | 'error' | 'ready'
 
@@ -19,11 +21,15 @@ const WordCard: React.FC<{word: string}> = ({word}) => {
 	const [wordCardState, setWordCardState] = useState<WordCardState>('loading')
 	const [wordAudio, setWordAudio] = useState<HTMLAudioElement | null>(null)
 	useEffect(() => {
-		fetchWordData(word).then((data) => {
-			setWordData(data)
-			setWordAudio(new Audio(data.word.audioSrc))
-			setWordCardState('ready')
-		})
+		fetchWordData(word)
+			.then((data) => {
+				setWordData(data)
+				setWordAudio(new Audio(data.word.audioSrc))
+				setWordCardState('ready')
+			})
+			.catch((err) => {
+				setWordCardState('error')
+			})
 	}, [])
 
 	const handleAudioPlay = (): void => {
@@ -32,11 +38,27 @@ const WordCard: React.FC<{word: string}> = ({word}) => {
 
 	if (wordCardState === 'loading' || wordCardState === 'error') {
 		return (
-			<div>
-				{wordCardState === 'loading'
-					? 'Loading...'
-					: 'Error: could not retrieve word data'}
-			</div>
+			<Card elevation={2}>
+				<Grid container justify='center' alignItems='center'>
+					<Grid item>
+						<CardContent>
+							{wordCardState === 'loading' && (
+								<Loader
+									type='TailSpin'
+									color='#00BFFF'
+									height={80}
+									width={80}
+								/>
+							)}
+							{wordCardState === 'error' && (
+								<Typography color='secondary'>
+									Error: could not retrieve word data
+								</Typography>
+							)}
+						</CardContent>
+					</Grid>
+				</Grid>
+			</Card>
 		)
 	}
 	return (
