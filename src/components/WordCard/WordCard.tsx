@@ -44,7 +44,7 @@ const WordCard: React.FC<Props> = ({word, onDelete}) => {
 		return (
 			<Box my={'16px'}>
 				<Card elevation={2}>
-					<Grid container justify='center' alignItems='center'>
+					<Grid container justifyContent='center' alignItems='center'>
 						<Grid item>
 							<CardContent>
 								{wordCardState === 'loading' && (
