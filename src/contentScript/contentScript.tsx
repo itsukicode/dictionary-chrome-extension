@@ -77,6 +77,13 @@ const App: React.FC<{}> = () => {
 	if (wordCardState === 'loading' || wordCardState === 'error') {
 		return (
 			<Card elevation={2} className='overlayCard'>
+				<Grid container justifyContent='flex-end'>
+					<Grid item>
+						<IconButton onClick={handleCloseButtonClick}>
+							<CloseIcon />
+						</IconButton>
+					</Grid>
+				</Grid>
 				<Grid container justifyContent='center' alignItems='center'>
 					<Grid item>
 						<CardContent>
@@ -84,8 +91,8 @@ const App: React.FC<{}> = () => {
 								<Loader
 									type='TailSpin'
 									color='#00BFFF'
-									height={80}
-									width={80}
+									height={150}
+									width={100}
 								/>
 							)}
 							{wordCardState === 'error' && (
