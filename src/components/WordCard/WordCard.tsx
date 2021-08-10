@@ -11,7 +11,6 @@ import {
 	IconButton,
 	Typography,
 } from '@material-ui/core'
-import './WordCard.css'
 import Loader from 'react-loader-spinner'
 
 type Props = {
@@ -24,6 +23,7 @@ const WordCard: React.FC<Props> = ({word, onDelete}) => {
 	const [wordData, setWordData] = useState<WordData | null>(null)
 	const [wordCardState, setWordCardState] = useState<WordCardState>('loading')
 	const [wordAudio, setWordAudio] = useState<HTMLAudioElement | null>(null)
+
 	useEffect(() => {
 		fetchWordData(word)
 			.then((data) => {
@@ -36,7 +36,7 @@ const WordCard: React.FC<Props> = ({word, onDelete}) => {
 			})
 	}, [])
 
-	const handleAudioPlay = (): void => {
+	const handleAudioPlayButtonClick = (): void => {
 		wordAudio.play()
 	}
 
@@ -73,22 +73,25 @@ const WordCard: React.FC<Props> = ({word, onDelete}) => {
 				<Grid container>
 					<Grid item xs={8}>
 						<CardContent>
-							<Grid className='wordCard-wrap' container alignItems='center'>
+							<Grid container alignItems='center' style={{height: '40px'}}>
 								<Grid item>
-									<Typography className='wordCard-word'>{word}</Typography>
+									<Typography style={{fontSize: '24px'}}>{word}</Typography>
 								</Grid>
 								<Grid item>
-									<IconButton onClick={handleAudioPlay}>
+									<IconButton onClick={handleAudioPlayButtonClick}>
 										<VolumeIcon>
 											<audio src={wordData.word.audioSrc}></audio>
 										</VolumeIcon>
 									</IconButton>
 								</Grid>
 							</Grid>
-							<Typography className='wordCard-pronounce' color='textSecondary'>
+							<Typography
+								color='textSecondary'
+								style={{fontSize: '10px', marginBottom: '10px'}}
+							>
 								{wordData.word.pronounce}
 							</Typography>
-							<Typography className='wordCard-def'>
+							<Typography style={{fontSize: '12px'}}>
 								{wordData.word.def}
 							</Typography>
 						</CardContent>
@@ -101,7 +104,7 @@ const WordCard: React.FC<Props> = ({word, onDelete}) => {
 								variant='outlined'
 								onClick={onDelete}
 							>
-								<Typography className='wordCard-delete'>消去</Typography>
+								<Typography style={{fontSize: '16px'}}>消去</Typography>
 							</Button>
 						</CardActions>
 					</Grid>
