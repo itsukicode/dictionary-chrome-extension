@@ -51,6 +51,10 @@ const App: React.FC<{}> = () => {
 	const handleAudioPlay = (): void => {
 		wordAudio.play()
 	}
+	const handleClose = (): void => {
+		setSelectedWord('')
+		setWordCardState('empty')
+	}
 
 	if (wordCardState === 'empty') {
 		return null
@@ -118,7 +122,7 @@ const App: React.FC<{}> = () => {
 						style={{height: '100%'}}
 					>
 						<Grid item>
-							<IconButton onClick={handleAudioPlay}>
+							<IconButton onClick={handleClose}>
 								<CloseIcon />
 							</IconButton>
 						</Grid>
