@@ -16,19 +16,21 @@ import {
 } from '@material-ui/core'
 import Loader from 'react-loader-spinner'
 
+type SavingState = 'ready' | 'saving'
 type WordCardState = 'empty' | 'loading' | 'error' | 'ready'
 const App: React.FC<{}> = () => {
 	const [wordData, setWordData] = useState<WordData | null>(null)
 	const [wordCardState, setWordCardState] = useState<WordCardState>('empty')
 	const [wordAudio, setWordAudio] = useState<HTMLAudioElement | null>(null)
 	const [selectedWord, setSelectedWord] = useState<string>('')
+	const [savingState, setSavingState] = useState<SavingState>('ready')
+
 	useEffect(() => {
 		window.addEventListener('dblclick', handleSelection)
 		return () => {
 			window.removeEventListener('dblclick', handleSelection)
 		}
 	}, [])
-
 	useEffect(() => {
 		if (selectedWord !== '') {
 			console.log(selectedWord)
@@ -48,13 +50,25 @@ const App: React.FC<{}> = () => {
 		setSelectedWord(window.getSelection().toString())
 		setWordCardState('loading')
 	}
-	const handleAudioPlay = (): void => {
+	const handleAudioPlayButtonClick = (): void => {
 		wordAudio.play()
 	}
-	const handleClose = (): void => {
+	const handleCloseButtonClick = (): void => {
 		setSelectedWord('')
 		setWordCardState('empty')
 	}
+	const handleSaveButtonClick = (): void => {
+		getStoredWords().then((words) => {
+			setSavingState('saving')
+			setStoredWords([...words, selectedWord]).then(() => {
+				setTimeout(() => {
+					setSavingState('ready')
+				}, 1000)
+			})
+		})
+	}
+
+	const isButtonDisabled = savingState === 'saving'
 
 	if (wordCardState === 'empty') {
 		return null
@@ -89,7 +103,7 @@ const App: React.FC<{}> = () => {
 	return (
 		<Card elevation={2} className='overlayCard'>
 			<Grid container>
-				<Grid item xs={8}>
+				<Grid item xs={7}>
 					<CardContent>
 						<Grid container alignItems='center' style={{height: '36px'}}>
 							<Grid item>
@@ -98,7 +112,10 @@ const App: React.FC<{}> = () => {
 								</Typography>
 							</Grid>
 							<Grid item>
-								<IconButton onClick={handleAudioPlay} style={{padding: '10px'}}>
+								<IconButton
+									onClick={handleAudioPlayButtonClick}
+									style={{padding: '10px'}}
+								>
 									<VolumeIcon>
 										<audio src={wordData.word.audioSrc}></audio>
 									</VolumeIcon>
@@ -113,7 +130,7 @@ const App: React.FC<{}> = () => {
 						</Typography>
 					</CardContent>
 				</Grid>
-				<Grid item xs={4}>
+				<Grid item xs={5}>
 					<Grid
 						container
 						direction='column'
@@ -122,7 +139,7 @@ const App: React.FC<{}> = () => {
 						style={{height: '100%'}}
 					>
 						<Grid item>
-							<IconButton onClick={handleClose}>
+							<IconButton onClick={handleCloseButtonClick}>
 								<CloseIcon />
 							</IconButton>
 						</Grid>
@@ -134,9 +151,12 @@ const App: React.FC<{}> = () => {
 									}}
 									size='small'
 									variant='outlined'
-									// onClick={}
+									onClick={handleSaveButtonClick}
+									disabled={isButtonDisabled}
 								>
-									<Typography className='wordCard-delete'>保存</Typography>
+									<Typography className='wordCard-delete'>
+										{savingState === 'ready' ? '保存' : '保存中'}
+									</Typography>
 								</Button>
 							</CardActions>
 						</Grid>
