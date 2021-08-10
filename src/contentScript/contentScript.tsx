@@ -4,6 +4,7 @@ import './contentScript.css'
 import {getStoredWords, setStoredWords} from '../utils/storage'
 import {fetchWordData, WordData} from '../utils/api'
 import {VolumeUp as VolumeIcon} from '@material-ui/icons'
+import CloseIcon from '@material-ui/icons/Close'
 import {
 	Button,
 	Card,
@@ -86,39 +87,56 @@ const App: React.FC<{}> = () => {
 			<Grid container>
 				<Grid item xs={8}>
 					<CardContent>
-						<Grid className='wordCard-wrap' container alignItems='center'>
+						<Grid container alignItems='center' style={{height: '36px'}}>
 							<Grid item>
-								<Typography className='wordCard-word'>
+								<Typography style={{fontSize: '20px'}}>
 									{selectedWord}
 								</Typography>
 							</Grid>
 							<Grid item>
-								<IconButton onClick={handleAudioPlay}>
+								<IconButton onClick={handleAudioPlay} style={{padding: '10px'}}>
 									<VolumeIcon>
 										<audio src={wordData.word.audioSrc}></audio>
 									</VolumeIcon>
 								</IconButton>
 							</Grid>
 						</Grid>
-						<Typography className='wordCard-pronounce' color='textSecondary'>
+						<Typography color='textSecondary' style={{marginBottom: '5px'}}>
 							{wordData.word.pronounce}
 						</Typography>
-						<Typography className='wordCard-def'>
+						<Typography style={{fontSize: '15px'}}>
 							{wordData.word.def}
 						</Typography>
 					</CardContent>
 				</Grid>
-				<Grid item xs={4} alignItems='flex-end'>
-					<CardActions>
-						<Button
-							color='secondary'
-							size='small'
-							variant='outlined'
-							// onClick={}
-						>
-							<Typography className='wordCard-delete'>保存</Typography>
-						</Button>
-					</CardActions>
+				<Grid item xs={4}>
+					<Grid
+						container
+						direction='column'
+						justifyContent='space-between'
+						alignItems='flex-end'
+						style={{height: '100%'}}
+					>
+						<Grid item>
+							<IconButton onClick={handleAudioPlay}>
+								<CloseIcon />
+							</IconButton>
+						</Grid>
+						<Grid item>
+							<CardActions>
+								<Button
+									style={{
+										color: '#009818',
+									}}
+									size='small'
+									variant='outlined'
+									// onClick={}
+								>
+									<Typography className='wordCard-delete'>保存</Typography>
+								</Button>
+							</CardActions>
+						</Grid>
+					</Grid>
 				</Grid>
 			</Grid>
 		</Card>
