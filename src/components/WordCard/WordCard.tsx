@@ -9,24 +9,30 @@ import {
 	CardContent,
 	Grid,
 	IconButton,
-	Typography,
+	Typography
 } from '@material-ui/core'
 import Loader from 'react-loader-spinner'
+import {WordLanguage} from '../../utils/storage'
 
 type Props = {
 	word: string
+	lang: WordLanguage
 	onDelete: () => void
 }
 type WordCardState = 'loading' | 'error' | 'ready'
 
-const WordCard: React.FC<Props> = ({word, onDelete}) => {
+const WordCard: React.FC<Props> = ({word, lang, onDelete}) => {
 	const [wordData, setWordData] = useState<WordData | null>(null)
 	const [wordCardState, setWordCardState] = useState<WordCardState>('loading')
 	const [wordAudio, setWordAudio] = useState<HTMLAudioElement | null>(null)
 
 	useEffect(() => {
-		fetchWordData(word)
+		fetchWordData(lang, word)
 			.then((data) => {
+				const audioSrc = data.word.audioSrc
+				data.word.audioSrc = audioSrc.startsWith('https://')
+					? audioSrc
+					: `https://${audioSrc}`
 				setWordData(data)
 				setWordAudio(new Audio(data.word.audioSrc))
 				setWordCardState('ready')
@@ -57,7 +63,7 @@ const WordCard: React.FC<Props> = ({word, onDelete}) => {
 								)}
 								{wordCardState === 'error' && (
 									<Typography color='secondary'>
-										Error: could not retrieve word data
+										{wordData.word.message}
 									</Typography>
 								)}
 							</CardContent>
@@ -71,7 +77,7 @@ const WordCard: React.FC<Props> = ({word, onDelete}) => {
 		<Box my={'16px'}>
 			<Card elevation={2}>
 				<Grid container>
-					<Grid item xs={8}>
+					<Grid item xs={9}>
 						<CardContent>
 							<Grid container alignItems='center' style={{height: '40px'}}>
 								<Grid item>
@@ -96,8 +102,8 @@ const WordCard: React.FC<Props> = ({word, onDelete}) => {
 							</Typography>
 						</CardContent>
 					</Grid>
-					<Grid item xs={4} alignItems='flex-end'>
-						<CardActions>
+					<Grid item xs={3} alignItems='flex-end'>
+						<CardActions style={{padding: '0px', paddingTop: '10px'}}>
 							<Button
 								color='secondary'
 								size='small'

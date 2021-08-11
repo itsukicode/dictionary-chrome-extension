@@ -1,7 +1,12 @@
 import React, {useState, useEffect} from 'react'
 import ReactDOM from 'react-dom'
 import './contentScript.css'
-import {getStoredWords, setStoredWords} from '../utils/storage'
+import {
+	getStoredWords,
+	setStoredWords,
+	getStoredLanguageOption,
+	WordLanguage
+} from '../utils/storage'
 import {fetchWordData, WordData} from '../utils/api'
 import {VolumeUp as VolumeIcon} from '@material-ui/icons'
 import CloseIcon from '@material-ui/icons/Close'
@@ -12,7 +17,7 @@ import {
 	CardContent,
 	Grid,
 	IconButton,
-	Typography,
+	Typography
 } from '@material-ui/core'
 import Loader from 'react-loader-spinner'
 
@@ -24,18 +29,25 @@ const App: React.FC<{}> = () => {
 	const [wordAudio, setWordAudio] = useState<HTMLAudioElement | null>(null)
 	const [selectedWord, setSelectedWord] = useState<string>('')
 	const [savingState, setSavingState] = useState<SavingState>('ready')
+	const [lang, setLang] = useState<WordLanguage | null>(null)
 
 	useEffect(() => {
+		getStoredLanguageOption().then((lang) => setLang(lang))
 		window.addEventListener('dblclick', handleSelection)
 		return () => {
 			window.removeEventListener('dblclick', handleSelection)
 		}
 	}, [])
+
 	useEffect(() => {
-		if (selectedWord !== '') {
-			console.log(selectedWord)
-			fetchWordData(selectedWord)
+		if (lang != null && selectedWord !== '') {
+			fetchWordData(lang, selectedWord)
 				.then((data) => {
+					const audioSrc = data.word.audioSrc
+					data.word.audioSrc = audioSrc.startsWith('https://')
+						? audioSrc
+						: `https://${audioSrc}`
+					console.log('data:', data)
 					setWordData(data)
 					setWordAudio(new Audio(data.word.audioSrc))
 					setWordCardState('ready')
@@ -97,7 +109,7 @@ const App: React.FC<{}> = () => {
 							)}
 							{wordCardState === 'error' && (
 								<Typography color='secondary'>
-									Error: could not retrieve word data
+									{wordData.word.message}
 								</Typography>
 							)}
 						</CardContent>
@@ -110,7 +122,7 @@ const App: React.FC<{}> = () => {
 	return (
 		<Card elevation={2} className='overlayCard'>
 			<Grid container>
-				<Grid item xs={7}>
+				<Grid item xs={8}>
 					<CardContent>
 						<Grid container alignItems='center' style={{height: '36px'}}>
 							<Grid item>
@@ -137,7 +149,7 @@ const App: React.FC<{}> = () => {
 						</Typography>
 					</CardContent>
 				</Grid>
-				<Grid item xs={5}>
+				<Grid item xs={4}>
 					<Grid
 						container
 						direction='column'
@@ -154,14 +166,14 @@ const App: React.FC<{}> = () => {
 							<CardActions>
 								<Button
 									style={{
-										color: '#009818',
+										color: '#009818'
 									}}
 									size='small'
 									variant='outlined'
 									onClick={handleSaveButtonClick}
 									disabled={isButtonDisabled}
 								>
-									<Typography className='wordCard-delete'>
+									<Typography>
 										{savingState === 'ready' ? '保存' : '保存中'}
 									</Typography>
 								</Button>
