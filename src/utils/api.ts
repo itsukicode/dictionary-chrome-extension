@@ -1,3 +1,4 @@
+import {WordLanguage} from './storage'
 export interface WordData {
 	word: {
 		pronounce: string
@@ -6,8 +7,13 @@ export interface WordData {
 	}
 }
 
-export async function fetchWordData(word: string): Promise<WordData> {
-	const res = await fetch(`https://us-central1-dictionary-api-b3e3e.cloudfunctions.net/app/search-word?word=${word}`)
+export async function fetchWordData(
+	lang: WordLanguage,
+	word: string
+): Promise<WordData> {
+	const res = await fetch(
+		`https://us-central1-dictionary-api-b3e3e.cloudfunctions.net/app/search-word?lang=${lang}&word=${word}`
+	)
 	if (!res.ok) {
 		throw new Error('Word not found')
 	}
