@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import ReactDOM from 'react-dom'
 import {
 	Box,
@@ -10,14 +10,49 @@ import {
 	InputLabel,
 	MenuItem,
 	Select,
-	Typography,
+	Typography
 } from '@material-ui/core'
+import {
+	setStoredWords,
+	getStoredLanguageOption,
+	setStoredLanguageOption,
+	WordLanguage
+} from '../utils/storage'
 
+type SavingState = 'ready' | 'saving'
 const App: React.FC<{}> = () => {
-	const [lang, setLang] = useState<string>('日本語')
-	const handleChange = (event: React.ChangeEvent<{value: unknown}>) => {
-		setLang(event.target.value as string)
+	const [lang, setLang] = useState<WordLanguage | null>(null)
+	const [prevLang, setPrevLang] = useState<WordLanguage | null>(null)
+	const [savingState, setSavingState] = useState<SavingState>('ready')
+
+	useEffect(() => {
+		getStoredLanguageOption().then((lang) => {
+			setLang(lang)
+			setPrevLang(lang)
+		})
+	}, [])
+
+	const handleChange = (e: React.ChangeEvent<{value: unknown}>) => {
+		setPrevLang((lang) => lang)
+		setLang(e.target.value as WordLanguage)
 	}
+	const handleSaveButtonClick = () => {
+		setSavingState('saving')
+		setStoredWords([]).then(() => {
+			setStoredLanguageOption(lang).then(() => {
+				setTimeout(() => {
+					setPrevLang(lang)
+					setSavingState('ready')
+				}, 1000)
+			})
+		})
+	}
+	if (!lang) {
+		return null
+	}
+
+	const isButtonDisabled = savingState === 'saving' || lang === prevLang
+
 	return (
 		<Box mx='10%' my='2%'>
 			<Card>
@@ -34,8 +69,8 @@ const App: React.FC<{}> = () => {
 									value={lang}
 									onChange={handleChange}
 								>
-									<MenuItem value={'日本語'}>日本語</MenuItem>
-									{/* <MenuItem value={'英語'}>英語</MenuItem> */}
+									<MenuItem value={'jp'}>日本語</MenuItem>
+									<MenuItem value={'en'}>英語</MenuItem>
 								</Select>
 							</FormControl>
 						</Grid>
@@ -44,12 +79,12 @@ const App: React.FC<{}> = () => {
 								variant='contained'
 								style={{
 									backgroundColor: '#009818',
-									color: '#fff',
+									color: '#fff'
 								}}
-								// onClick={handleSaveButtonClick}
-								// disabled={isFieldsDisabled}
+								onClick={handleSaveButtonClick}
+								disabled={isButtonDisabled}
 							>
-								保存
+								{savingState === 'ready' ? '保存' : '保存中'}
 							</Button>
 						</Grid>
 					</Grid>
