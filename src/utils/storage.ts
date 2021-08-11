@@ -1,11 +1,9 @@
 export interface LocalStorage {
 	words?: string[]
-	option?: LocalStorageOption
+	lang?:  WordLanguage
 }
 export type WordLanguage = 'jp' | 'en'
-export interface LocalStorageOption {
-	lang?: WordLanguage
-}
+
 export type LocalStorageKey = keyof LocalStorage
 
 export function getStoredWords(): Promise<string[]> {
@@ -26,17 +24,17 @@ export function setStoredWords(words: string[]): Promise<void> {
 	})
 }
 
-export function getStoredOption(): Promise<LocalStorageOption> {
-	const key: LocalStorageKey[] = ['option']
+export function getStoredLanguageOption(): Promise<WordLanguage> {
+	const key: LocalStorageKey[] = ['lang']
 	return new Promise((resolve) => {
 		chrome.storage.local.get(key, (res: LocalStorage) => {
-			resolve(res.option)
+			resolve(res.lang)
 		})
 	})
 }
 
-export function setStoredOption(option: LocalStorageOption): Promise<void> {
-	const vals: LocalStorage = {option: option}
+export function setStoredLanguageOption(lang: WordLanguage): Promise<void> {
+	const vals: LocalStorage = {lang: lang}
 	return new Promise((resolve) => {
 		chrome.storage.local.set(vals, () => {
 			resolve()

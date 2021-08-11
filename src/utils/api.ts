@@ -4,6 +4,7 @@ export interface WordData {
 		pronounce: string
 		audioSrc: string
 		def: string
+		message: string
 	}
 }
 
