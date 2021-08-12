@@ -16,7 +16,7 @@ export async function fetchWordData(
 		`https://us-central1-dictionary-api-b3e3e.cloudfunctions.net/app/search-word?lang=${lang}&word=${word}`
 	)
 	if (!res.ok) {
-		throw new Error('Word not found')
+		throw new Error('データの取得に失敗しました。')
 	}
 	const data: WordData = await res.json()
 	return data
