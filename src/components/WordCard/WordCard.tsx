@@ -63,7 +63,7 @@ const WordCard: React.FC<Props> = ({word, lang, onDelete}) => {
 								)}
 								{wordCardState === 'error' && (
 									<Typography color='secondary'>
-										{wordData.word.message}
+										データの取得に失敗しました。
 									</Typography>
 								)}
 							</CardContent>

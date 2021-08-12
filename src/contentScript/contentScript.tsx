@@ -47,7 +47,6 @@ const App: React.FC<{}> = () => {
 					data.word.audioSrc = audioSrc.startsWith('https://')
 						? audioSrc
 						: `https://${audioSrc}`
-					console.log('data:', data)
 					setWordData(data)
 					setWordAudio(new Audio(data.word.audioSrc))
 					setWordCardState('ready')
@@ -109,7 +108,7 @@ const App: React.FC<{}> = () => {
 							)}
 							{wordCardState === 'error' && (
 								<Typography color='secondary'>
-									{wordData.word.message}
+									データの取得に失敗しました。
 								</Typography>
 							)}
 						</CardContent>
