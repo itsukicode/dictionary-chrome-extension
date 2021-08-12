@@ -1,6 +1,6 @@
 {
-	"name": "Dictionary Extension",
-	"description": "Search definition of the word using double click",
+	"name": "ダブルクリック辞典",
+	"description": "ダブルクリックで日本語と英単語の意味をブラウザー上で確認できます。",
 	"version": "1.0.0",
 	"manifest_version": 3,
 	"icons": {
