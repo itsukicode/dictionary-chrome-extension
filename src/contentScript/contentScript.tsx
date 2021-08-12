@@ -102,7 +102,7 @@ const App: React.FC<{}> = () => {
 								<Loader
 									type='TailSpin'
 									color='#00BFFF'
-									height={150}
+									height={100}
 									width={100}
 								/>
 							)}
