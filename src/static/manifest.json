@@ -10,7 +10,7 @@
 	},
 	"action": {
 		"default_popup": "popup.html",
-		"default_title": "Dictionary Extension",
+		"default_title": "ダブルクリック辞典",
 		"default_icon": "icon.png"
 	},
 	"permissions": ["storage"],
