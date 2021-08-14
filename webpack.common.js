@@ -1,7 +1,7 @@
 const path = require('path')
 const CopyPlugin = require('copy-webpack-plugin')
 const HtmlPlugin = require('html-webpack-plugin')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const {CleanWebpackPlugin} = require('clean-webpack-plugin')
 
 module.exports = {
 	entry: {
@@ -51,10 +51,7 @@ module.exports = {
 	optimization: {
 		splitChunks: {
 			chunks(chunk) {
-				return (
-					chunk.name !== 'contentScript' &&
-					chunk.name !== 'background'
-				)
+				return chunk.name !== 'contentScript' && chunk.name !== 'background'
 			}
 		}
 	}
@@ -64,7 +61,7 @@ function getHtmlPlugins(chunks) {
 	return chunks.map(
 		(chunk) =>
 			new HtmlPlugin({
-				title: 'Dictionary Extension',
+				title: 'ダブルクリック辞典',
 				filename: `${chunk}.html`,
 				chunks: [chunk]
 			})
