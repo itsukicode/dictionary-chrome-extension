@@ -59,7 +59,7 @@ const App: React.FC<{}> = () => {
 				<CardContent>
 					<Grid container direction='column' spacing={4}>
 						<Grid item>
-							<Typography variant='h4'>Dictionary Extension Options</Typography>
+							<Typography variant='h4'>Options</Typography>
 						</Grid>
 						<Grid item>
 							<FormControl style={{width: '150px'}}>
